@@ -75,7 +75,7 @@ describe('createOrder', () => {
   });
 
   it('rejects a blank customer name (RN01)', () => {
-    expect(problemsOf(validInput({ customerName: '   ' }))).toEqual(['customerName é obrigatório']);
+    expect(problemsOf(validInput({ customerName: '   ' }))).toEqual(['customerName is required']);
   });
 
   it('accepts a customer name exactly at the length limit (RN01)', () => {
@@ -88,25 +88,25 @@ describe('createOrder', () => {
     const customerName = 'a'.repeat(MAX_CUSTOMER_NAME_LENGTH + 1);
 
     expect(problemsOf(validInput({ customerName }))).toEqual([
-      'customerName deve ter no máximo 100 caracteres',
+      'customerName must be at most 100 characters',
     ]);
   });
 
   it('rejects an order without items (RN02)', () => {
-    expect(problemsOf(validInput({ items: [] }))).toEqual(['o pedido precisa de pelo menos 1 item']);
+    expect(problemsOf(validInput({ items: [] }))).toEqual(['order must have at least 1 item']);
   });
 
   it('rejects an item without sku (RN03)', () => {
     const items = [{ sku: '  ', quantity: 1, unitPriceCents: 100 }];
 
-    expect(problemsOf(validInput({ items }))).toEqual(['items[0].sku é obrigatório']);
+    expect(problemsOf(validInput({ items }))).toEqual(['items[0].sku is required']);
   });
 
   it.each([0, -1, 1.5])('rejects quantity %s (RN04)', (quantity) => {
     const items = [{ sku: 'CAFE-500G', quantity, unitPriceCents: 100 }];
 
     expect(problemsOf(validInput({ items }))).toEqual([
-      'items[0].quantity deve ser um inteiro maior que 0',
+      'items[0].quantity must be an integer greater than 0',
     ]);
   });
 
@@ -114,7 +114,7 @@ describe('createOrder', () => {
     const items = [{ sku: 'CAFE-500G', quantity: 1, unitPriceCents }];
 
     expect(problemsOf(validInput({ items }))).toEqual([
-      'items[0].unitPriceCents deve ser um inteiro maior ou igual a 0',
+      'items[0].unitPriceCents must be an integer greater than or equal to 0',
     ]);
   });
 
@@ -128,16 +128,16 @@ describe('createOrder', () => {
     };
 
     expect(problemsOf(input)).toEqual([
-      'customerName é obrigatório',
-      'items[1].sku é obrigatório',
-      'items[1].quantity deve ser um inteiro maior que 0',
-      'items[1].unitPriceCents deve ser um inteiro maior ou igual a 0',
+      'customerName is required',
+      'items[1].sku is required',
+      'items[1].quantity must be an integer greater than 0',
+      'items[1].unitPriceCents must be an integer greater than or equal to 0',
     ]);
   });
 
   it('throws an InvalidOrderError whose message lists the problems', () => {
     expect(() => createOrder(validInput({ items: [] }), 'order-1', NOW)).toThrow(
-      'Pedido inválido: o pedido precisa de pelo menos 1 item',
+      'Invalid order: order must have at least 1 item',
     );
   });
 });

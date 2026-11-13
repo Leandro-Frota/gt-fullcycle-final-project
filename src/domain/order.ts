@@ -25,7 +25,7 @@ export const MAX_CUSTOMER_NAME_LENGTH = 100;
 
 export class InvalidOrderError extends Error {
   constructor(public readonly problems: string[]) {
-    super(`Pedido inválido: ${problems.join('; ')}`);
+    super(`Invalid order: ${problems.join('; ')}`);
     this.name = 'InvalidOrderError';
   }
 }
@@ -54,24 +54,24 @@ function validate(input: CreateOrderInput): string[] {
   const customerName = input.customerName.trim();
 
   if (customerName === '') {
-    problems.push('customerName é obrigatório');
+    problems.push('customerName is required');
   } else if (customerName.length > MAX_CUSTOMER_NAME_LENGTH) {
-    problems.push(`customerName deve ter no máximo ${MAX_CUSTOMER_NAME_LENGTH} caracteres`);
+    problems.push(`customerName must be at most ${MAX_CUSTOMER_NAME_LENGTH} characters`);
   }
 
   if (input.items.length === 0) {
-    problems.push('o pedido precisa de pelo menos 1 item');
+    problems.push('order must have at least 1 item');
   }
 
   input.items.forEach((item, index) => {
     if (item.sku.trim() === '') {
-      problems.push(`items[${index}].sku é obrigatório`);
+      problems.push(`items[${index}].sku is required`);
     }
     if (!Number.isInteger(item.quantity) || item.quantity < 1) {
-      problems.push(`items[${index}].quantity deve ser um inteiro maior que 0`);
+      problems.push(`items[${index}].quantity must be an integer greater than 0`);
     }
     if (!Number.isInteger(item.unitPriceCents) || item.unitPriceCents < 0) {
-      problems.push(`items[${index}].unitPriceCents deve ser um inteiro maior ou igual a 0`);
+      problems.push(`items[${index}].unitPriceCents must be an integer greater than or equal to 0`);
     }
   });
 

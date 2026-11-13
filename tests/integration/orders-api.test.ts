@@ -61,7 +61,7 @@ describe('Orders API', () => {
     expect(response.status).toBe(400);
     expect(response.body.error).toMatchObject({
       code: 'INVALID_ORDER',
-      details: ['customerName é obrigatório', 'o pedido precisa de pelo menos 1 item'],
+      details: ['customerName is required', 'order must have at least 1 item'],
     });
   });
 
@@ -82,7 +82,7 @@ describe('Orders API', () => {
     expect(response.status).toBe(400);
     expect(response.body.error).toEqual({
       code: 'INVALID_ORDER',
-      message: 'O corpo da requisição não é um JSON válido',
+      message: 'Request body is not valid JSON',
     });
   });
 
@@ -92,7 +92,7 @@ describe('Orders API', () => {
     expect(response.status).toBe(404);
     expect(response.body.error).toEqual({
       code: 'ORDER_NOT_FOUND',
-      message: `Pedido ${UNKNOWN_ID} não encontrado`,
+      message: `Order ${UNKNOWN_ID} not found`,
     });
   });
 
@@ -103,7 +103,7 @@ describe('Orders API', () => {
     const response = await request(app).get(`/orders/${UNKNOWN_ID}`);
 
     expect(response.status).toBe(500);
-    expect(response.body).toEqual({ error: { code: 'INTERNAL_ERROR', message: 'Erro interno inesperado' } });
+    expect(response.body).toEqual({ error: { code: 'INTERNAL_ERROR', message: 'Unexpected internal error' } });
     expect(consoleError).toHaveBeenCalled();
   });
 });

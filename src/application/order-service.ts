@@ -4,7 +4,7 @@ import type { OrderRepository } from '../domain/order-repository.js';
 
 export class OrderNotFoundError extends Error {
   constructor(public readonly orderId: string) {
-    super(`Pedido ${orderId} não encontrado`);
+    super(`Order ${orderId} not found`);
     this.name = 'OrderNotFoundError';
   }
 }

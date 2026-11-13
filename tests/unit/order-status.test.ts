@@ -22,7 +22,7 @@ function orderWith(status: OrderStatus): Order {
   };
 }
 
-describe('transições válidas', () => {
+describe('valid transitions', () => {
   const valid: [OrderStatus, OrderAction, OrderStatus][] = [
     ['pending', 'pay', 'paid'],
     ['paid', 'ship', 'shipped'],
@@ -37,7 +37,7 @@ describe('transições válidas', () => {
     expect(canTransition(from, action)).toBe(true);
   });
 
-  it('não altera o pedido original (imutabilidade)', () => {
+  it('does not mutate the original order', () => {
     const original = orderWith('pending');
 
     const result = transition(original, 'pay', NOW);
@@ -47,7 +47,7 @@ describe('transições válidas', () => {
     expect(original.updatedAt).toEqual(CREATED_AT);
   });
 
-  it('preserva os demais campos do pedido', () => {
+  it('preserves the other order fields', () => {
     const original = orderWith('pending');
 
     const result = transition(original, 'pay', NOW);
@@ -59,7 +59,7 @@ describe('transições válidas', () => {
     expect(result.createdAt).toEqual(CREATED_AT);
   });
 
-  it('permite o fluxo completo pending -> paid -> shipped', () => {
+  it('allows the full flow pending -> paid -> shipped', () => {
     const paid = transition(orderWith('pending'), 'pay', NOW);
     const shipped = transition(paid, 'ship', NOW);
 
@@ -67,7 +67,7 @@ describe('transições válidas', () => {
   });
 });
 
-describe('transições inválidas', () => {
+describe('invalid transitions', () => {
   const invalid: [OrderStatus, OrderAction][] = [
     ['pending', 'ship'],
     ['paid', 'pay'],
@@ -80,15 +80,15 @@ describe('transições inválidas', () => {
     ['cancelled', 'cancel'],
   ];
 
-  it.each(invalid)('%s + %s lança InvalidTransitionError', (from, action) => {
+  it.each(invalid)('%s + %s throws InvalidTransitionError', (from, action) => {
     expect(() => transition(orderWith(from), action, NOW)).toThrow(InvalidTransitionError);
     expect(canTransition(from, action)).toBe(false);
   });
 
-  it('informa o status de origem e a ação no erro', () => {
+  it('reports the source status and the action in the error', () => {
     try {
       transition(orderWith('shipped'), 'cancel', NOW);
-      expect.unreachable('deveria ter lançado InvalidTransitionError');
+      expect.unreachable('should have thrown InvalidTransitionError');
     } catch (error) {
       expect(error).toBeInstanceOf(InvalidTransitionError);
       const typed = error as InvalidTransitionError;
@@ -99,7 +99,7 @@ describe('transições inválidas', () => {
     }
   });
 
-  it('não altera o pedido quando a transição é inválida', () => {
+  it('does not change the order when the transition is invalid', () => {
     const original = orderWith('shipped');
 
     expect(() => transition(original, 'cancel', NOW)).toThrow();

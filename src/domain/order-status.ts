@@ -17,7 +17,7 @@ export class InvalidTransitionError extends Error {
     public readonly from: OrderStatus,
     public readonly action: OrderAction,
   ) {
-    super(`Transição inválida: não é possível executar "${action}" em um pedido ${from}`);
+    super(`Invalid transition: cannot "${action}" an order that is ${from}`);
     this.name = 'InvalidTransitionError';
   }
 }

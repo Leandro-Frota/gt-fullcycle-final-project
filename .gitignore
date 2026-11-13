@@ -1,0 +1,13 @@
+# dependências e build
+node_modules/
+dist/
+coverage/
+
+# segredos: só o .env.example vai para o Git
+.env
+.env.*
+!.env.example
+
+# outros
+*.log
+.DS_Store
